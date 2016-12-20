@@ -18,8 +18,7 @@
 			#pragma fragment frag
 			// make fog work
 			#pragma multi_compile_fog
-			#pragma alpha
-			
+
 			#include "UnityCG.cginc"
 
 			struct appdata
@@ -56,13 +55,13 @@
 				UNITY_APPLY_FOG(i.fogCoord, col);
 	
 				half burstSpeed = 3.;
-				half ball = smoothstep(.6,0., length(i.uv - .5));
+				half ball = smoothstep(.4,0., length(i.uv - .5));
 				half burst = smoothstep(.45+ burstSpeed*_StartTime, 0., length(i.uv - .5));
 				
 				half ResonanceStartTime = 0.4;
 				half startResonance = 1.-step(-ResonanceStartTime + _StartTime, 0.);
 				
-				half Resonance = floor(10.*sin(length((i.uv - .5)*(1.-_StartTime))*20.));
+				half Resonance = floor(10.*sin(length((i.uv - .5)*(1.-_StartTime*1.5))*30.));
 				// separate events according to time startResonance
 
 				// the following line includes burst

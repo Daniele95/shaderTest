@@ -63,9 +63,9 @@
 				UNITY_APPLY_FOG(i.fogCoord, col);
 
 				half ball = step(length(i.uv - .5), .38);
-				half3 color = half3(1., 0., 1.);
+				half3 color = half3(.996, .52, .582);
 
-				half alpha = ball*1. - 5.*sqrt(_StartTime);
+				half alpha = ball*1. - 2.*sqrt(_StartTime);
 				// the square root allows for a faster transition
 				color = color + col*_BallHeight;
 
