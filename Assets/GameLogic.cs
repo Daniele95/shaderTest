@@ -2,7 +2,7 @@
 using System.Collections;
 
 
-[ExecuteInEditMode]
+
 public class GameLogic : MonoBehaviour {
 
     public GameObject sprite;

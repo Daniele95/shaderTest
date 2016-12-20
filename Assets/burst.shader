@@ -50,26 +50,30 @@
 			fixed4 frag (v2f i) : SV_Target
 			{
 				// sample the texture
-				fixed4 col = tex2D(_MainTex, i.uv);
+				//fixed4 col = tex2D(_MainTex, i.uv);
 				// apply fog
 				UNITY_APPLY_FOG(i.fogCoord, col);
-	
-				half burstSpeed = 3.;
-				half ball = smoothstep(.4,0., length(i.uv - .5));
-				half burst = smoothstep(.45+ burstSpeed*_StartTime, 0., length(i.uv - .5));
-				
-				half ResonanceStartTime = 0.4;
-				half startResonance = 1.-step(-ResonanceStartTime + _StartTime, 0.);
-				
-				half Resonance = floor(10.*sin(length((i.uv - .5)*(1.-_StartTime*1.5))*30.));
-				// separate events according to time startResonance
 
-				// the following line includes burst
-				//half finalAlpha = (1. - startResonance)*burst + startResonance*Resonance*step(_StartTime, ResonanceStartTime+0.5);
-				// the following line does not
-				half finalAlpha = Resonance*step(_StartTime, ResonanceStartTime );
+				half x = i.uv.x - 0.5;
+				half y = i.uv.y - 0.5;
+				half r = length(i.uv - .5);
 
-				return half4(1.,1.,1.,finalAlpha*ball);
+				half t1 = 0.3; // Start resonance time
+				half t2 = .6; // End resonance time
+				half t = _StartTime;
+				half T = t - t1;
+
+				half3 col = half3(1., .7, .7);
+				half circle = pow( .1 / r, 2. );
+
+				half burst = sin( t / t1 * 3.1415 );
+				half resonance = pow( cos(r* (t2-t)*100. ), 3.5);
+				resonance *= pow(sin(atan(x / y)), 2.5);
+
+				half effects = step( t, t1 ) * burst; // Burst while t<t1
+				effects += step( t, t2 ) * resonance; // Resonance while t<t2
+
+				return half4( col, effects * circle );
 			}
 			ENDCG
 		}
